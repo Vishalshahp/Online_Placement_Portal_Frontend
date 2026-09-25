@@ -4,6 +4,31 @@ import { Search, MapPin, Clock3, Bookmark } from "lucide-react";
 import { TiltCard, FadeIn } from "../components/TiltCard";
 
 export function Jobs({ jobs, setPage }) {
+  const [activeFilter, setActiveFilter] = React.useState("All Jobs");
+  const [savedJobs, setSavedJobs] = React.useState(new Set());
+
+  const toggleSave = (id) => {
+    setSavedJobs((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const filterList = ["All Jobs", "Full Time", "Internships", "Ahmedabad", "Remote"];
+
+  const filteredJobs = jobs.filter((j) => {
+    if (activeFilter === "All Jobs") return true;
+    if (activeFilter === "Full Time") return j.type === "Full Time";
+    if (activeFilter === "Internships")
+      return j.type.toLowerCase().includes("intern") || j.role.toLowerCase().includes("trainee");
+    if (activeFilter === "Ahmedabad") return j.location.toLowerCase().includes("ahmedabad");
+    if (activeFilter === "Remote")
+      return j.location.toLowerCase().includes("remote") || j.location.toLowerCase().includes("hybrid");
+    return true;
+  });
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -20,26 +45,36 @@ export function Jobs({ jobs, setPage }) {
       </div>
       <FadeIn delay={0.1}>
         <div className="filters">
-          <button className="filter active">All Jobs</button>
-          <button className="filter">Full Time</button>
-          <button className="filter">Internships</button>
-          <button className="filter">Ahmedabad</button>
-          <button className="filter">Remote</button>
+          {filterList.map((f) => (
+            <button
+              key={f}
+              type="button"
+              className={`filter ${activeFilter === f ? "active" : ""}`}
+              onClick={() => setActiveFilter(f)}
+            >
+              {f}
+            </button>
+          ))}
         </div>
       </FadeIn>
       <div className="job-grid">
-        {jobs.map((j, idx) => (
+        {filteredJobs.map((j, idx) => (
           <FadeIn key={j.id} delay={0.1 + idx * 0.1}>
-            <JobCard job={j} onApply={() => setPage("applications")} />
+            <JobCard
+              job={j}
+              isSaved={savedJobs.has(j.id)}
+              onToggleSave={() => toggleSave(j.id)}
+              onApply={() => setPage("applications")}
+            />
           </FadeIn>
         ))}
       </div>
-      {jobs.length === 0 && (
+      {filteredJobs.length === 0 && (
         <FadeIn delay={0.2}>
           <div className="empty">
             <Search size={30} />
             <h3>No jobs found</h3>
-            <p>Try another search keyword.</p>
+            <p>Try selecting another filter or clearing your search keywords.</p>
           </div>
         </FadeIn>
       )}
@@ -47,13 +82,20 @@ export function Jobs({ jobs, setPage }) {
   );
 }
 
-function JobCard({ job, onApply }) {
+function JobCard({ job, isSaved, onToggleSave, onApply }) {
   return (
     <TiltCard className="job-card">
       <div className="company-row">
         <div className="company-logo">{job.logo}</div>
-        <button className="icon-btn">
-          <Bookmark size={18} />
+        <button
+          type="button"
+          className="icon-btn"
+          onClick={onToggleSave}
+          title={isSaved ? "Remove bookmark" : "Bookmark this job"}
+          aria-label={isSaved ? "Saved" : "Save"}
+          style={{ color: isSaved ? "#2563EB" : undefined }}
+        >
+          <Bookmark size={18} fill={isSaved ? "#2563EB" : "none"} />
         </button>
       </div>
       <div className="company-name">{job.company}</div>
@@ -75,7 +117,7 @@ function JobCard({ job, onApply }) {
       </div>
       <div className="card-foot" style={{ marginTop: "auto" }}>
         <strong>{job.salary}</strong>
-        <button className="primary small" onClick={onApply}>
+        <button type="button" className="primary small" onClick={onApply}>
           View & Apply
         </button>
       </div>

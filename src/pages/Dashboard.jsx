@@ -3,8 +3,12 @@ import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, FileText, CalendarDays, UserRound, ChevronRight } from "lucide-react";
 import { jobs } from "../data/jobs";
 import { TiltCard, FadeIn } from "../components/TiltCard";
+import { useAuth } from "../context/AuthContext";
 
 export function Dashboard({ setPage }) {
+  const { user } = useAuth();
+  const firstName = user?.name ? user.name.split(" ")[0] : "Student";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -15,7 +19,7 @@ export function Dashboard({ setPage }) {
       <div className="welcome">
         <div>
           <div className="eyebrow">THURSDAY, 25 SEPTEMBER 2026</div>
-          <h1>Good morning, Vishal 👋</h1>
+          <h1>Good morning, {firstName} 👋</h1>
           <p>Here’s what’s happening with your placement journey today.</p>
         </div>
         <button className="primary" onClick={() => setPage("jobs")}>
@@ -42,7 +46,7 @@ export function Dashboard({ setPage }) {
             </div>
             <div className="job-list">
               {jobs.slice(0, 3).map((j) => (
-                <JobRow key={j.id} job={j} />
+                <JobRow key={j.id} job={j} onClick={() => setPage("jobs")} />
               ))}
             </div>
           </section>
@@ -68,21 +72,21 @@ export function Dashboard({ setPage }) {
                 />
               </div>
             </div>
-            <div className="check-row">
+            <div className="check-row" onClick={() => setPage("profile")} style={{ cursor: "pointer" }}>
               <CheckCircle2 />
               <div>
                 <strong>Profile completed</strong>
                 <span>All basic information added</span>
               </div>
             </div>
-            <div className="check-row">
+            <div className="check-row" onClick={() => setPage("resume")} style={{ cursor: "pointer" }}>
               <CheckCircle2 />
               <div>
                 <strong>Resume uploaded</strong>
                 <span>Updated 3 days ago</span>
               </div>
             </div>
-            <div className="check-row pending">
+            <div className="check-row pending" onClick={() => setPage("profile")} style={{ cursor: "pointer" }}>
               <div className="dot"></div>
               <div>
                 <strong>Complete skill assessment</strong>
@@ -102,9 +106,27 @@ export function Dashboard({ setPage }) {
             </div>
           </div>
           <div className="timeline">
-            <Activity icon={<CheckCircle2 />} title="You were shortlisted for Systems Engineer" company="Infosys" time="Today, 10:30 AM" />
-            <Activity icon={<CalendarDays />} title="Interview scheduled for Graduate Software Trainee" company="TCS • Tomorrow at 11:00 AM" time="Yesterday" />
-            <Activity icon={<FileText />} title="Application submitted successfully" company="Deloitte • Business Technology Analyst" time="20 Sep 2026" />
+            <Activity
+              icon={<CheckCircle2 />}
+              title="You were shortlisted for Systems Engineer"
+              company="Infosys"
+              time="Today, 10:30 AM"
+              onClick={() => setPage("interviews")}
+            />
+            <Activity
+              icon={<CalendarDays />}
+              title="Interview scheduled for Graduate Software Trainee"
+              company="TCS • Tomorrow at 11:00 AM"
+              time="Yesterday"
+              onClick={() => setPage("interviews")}
+            />
+            <Activity
+              icon={<FileText />}
+              title="Application submitted successfully"
+              company="Deloitte • Business Technology Analyst"
+              time="20 Sep 2026"
+              onClick={() => setPage("applications")}
+            />
           </div>
         </section>
       </FadeIn>
@@ -125,9 +147,9 @@ function Stat({ label, value, meta, icon: Icon }) {
   );
 }
 
-function JobRow({ job }) {
+function JobRow({ job, onClick }) {
   return (
-    <div className="job-row">
+    <div className="job-row" onClick={onClick} style={{ cursor: "pointer" }}>
       <div className="company-logo small-logo">{job.logo}</div>
       <div className="jr-main">
         <strong>{job.role}</strong>
@@ -142,9 +164,9 @@ function JobRow({ job }) {
   );
 }
 
-function Activity({ icon, title, company, time }) {
+function Activity({ icon, title, company, time, onClick }) {
   return (
-    <div className="activity-row">
+    <div className="activity-row" onClick={onClick} style={{ cursor: onClick ? "pointer" : "default" }}>
       <div className="activity-icon">{icon}</div>
       <div>
         <strong>{title}</strong>

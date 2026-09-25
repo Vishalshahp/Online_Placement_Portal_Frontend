@@ -1,0 +1,374 @@
+/* ============================================================
+   Home Page — CSS
+   Minimal overrides. Bootstrap handles layout and grid.
+   ============================================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* ─── Navbar link underline ───────────────────────────────── */
+.navbar .nav-link {
+  position: relative;
+  transition: color 0.18s ease;
+}
+
+.navbar .nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  background: #2563EB;
+  border-radius: 99px;
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+  transform-origin: left;
+}
+
+.navbar .nav-link:hover {
+  color: #2563EB !important;
+}
+
+.navbar .nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+
+/* ─── Subtle button transitions ───────────────────────────── */
+.btn {
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
+}
+
+/* ─── Mobile ──────────────────────────────────────────────── */
+@media (max-width: 575.98px) {
+  section:not(.hero-section) {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+}
+
+@media (max-width: 991.98px) {
+
+  /* Mobile nav items have dividers */
+  .navbar-collapse .nav-item {
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .navbar-collapse .nav-item:last-child {
+    border-bottom: none;
+  }
+}
+
+/* ─── Hero Section (Clean Centered Editorial with Ambient Grid) ── */
+.hero-section {
+  position: relative;
+  background: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;
+  padding-top: 104px !important;
+  padding-bottom: 72px !important;
+  overflow: hidden;
+}
+
+.hero-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(148, 163, 184, 0.24) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, #000 35%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, #000 35%, transparent 100%);
+  pointer-events: none;
+}
+
+.hero-ambient-glow {
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 760px;
+  height: 360px;
+  background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.08) 0%, rgba(37, 99, 235, 0) 70%);
+  filter: blur(44px);
+  pointer-events: none;
+}
+
+@keyframes pulse-beacon {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}
+
+.live-beacon {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #16A34A;
+  animation: pulse-beacon 2s infinite ease-in-out;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+
+@media (max-width: 991.98px) {
+  .hero-section {
+    padding-top: 92px !important;
+    padding-bottom: 52px !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .hero-section {
+    padding-top: 86px !important;
+    padding-bottom: 44px !important;
+  }
+}
+
+/* ─── Trusted Companies Marquee & Showcase ────────────────── */
+.trusted-companies-section {
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0;
+  padding: 48px 0 42px;
+  position: relative;
+  overflow: hidden;
+}
+
+.trusted-ambient-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 240px;
+  background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.05) 0%, rgba(37, 99, 235, 0) 70%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.marquee-container {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  position: relative;
+  width: 100%;
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+.marquee-track {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 16px;
+  animation: marquee-scroll 35s linear infinite;
+  padding: 6px 0;
+}
+
+.marquee-track-reverse {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 16px;
+  animation: marquee-scroll-reverse 38s linear infinite;
+  padding: 6px 0;
+}
+
+.marquee-container:hover .marquee-track,
+.marquee-container:hover .marquee-track-reverse {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - 8px));
+  }
+}
+
+@keyframes marquee-scroll-reverse {
+  from {
+    transform: translateX(calc(-50% - 8px));
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.company-logo-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  padding: 9px 18px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  color: #1E293B;
+  cursor: default;
+}
+
+.company-logo-chip:hover {
+  transform: translateY(-2px);
+  border-color: #CBD5E1;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+  background: #FFFFFF;
+}
+
+.company-logo-chip .chip-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0F172A;
+  letter-spacing: -0.01em;
+}
+
+.company-logo-chip .chip-tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748B;
+  background: #F1F5F9;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+/* ─── Features (Clean, Minimal & Breathable) ──────────────── */
+.features-section {
+  background: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;
+  padding: 64px 0 68px;
+  position: relative;
+}
+
+.feature-item {
+  transition: transform 0.2s ease;
+}
+
+.feature-item:hover {
+  transform: translateY(-2px);
+}
+
+.feature-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: #2563EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  transition: all 0.2s ease;
+}
+
+.feature-item:hover .feature-icon-box {
+  background: #EFF6FF;
+  border-color: #BFDBFE;
+  color: #1D4ED8;
+}
+
+@media (max-width: 991.98px) {
+  .features-section {
+    padding: 48px 0 52px;
+  }
+}
+
+/* ─── Testimonials (Minimal & Breathable) ──────────────────── */
+.testimonials-section {
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0;
+  padding: 64px 0 68px;
+  position: relative;
+}
+
+.testimonial-tile {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 22px 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.testimonial-tile:hover {
+  transform: translateY(-2px);
+  border-color: #CBD5E1;
+  box-shadow: 0 10px 24px -4px rgba(15, 23, 42, 0.07);
+}
+
+@media (max-width: 991.98px) {
+  .testimonials-section {
+    padding: 48px 0 52px;
+  }
+}
+
+/* ─── FAQ (Clean & Minimal) ────────────────────────────────── */
+.faq-section {
+  background: #FFFFFF;
+  border-top: 1px solid #E2E8F0;
+  padding: 68px 0 72px;
+  position: relative;
+}
+
+.faq-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.faq-card:hover {
+  border-color: #CBD5E1;
+}
+
+.faq-card.active {
+  border-color: #2563EB;
+  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.06);
+}
+
+.faq-help-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 24px;
+}
+
+@media (max-width: 991.98px) {
+  .faq-section {
+    padding: 48px 0 52px;
+  }
+  .faq-help-box {
+    margin-top: 20px;
+    margin-bottom: 24px;
+  }
+}
